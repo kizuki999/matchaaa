@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>matcha</title>
+    <meta property="og:title" content="cute">
+    <meta property="og:description" content="matcha360spidergwen">
+    
+    <style>
+        body {
+            background-color: #e3f2fd; 
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #heart-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sunflower {
+            position: absolute;
+            font-size: 24px;
+            user-select: none;
+            animation: floatUp 4s linear forwards;
+            opacity: 1;
+        }
+
+        @keyframes floatUp {
+            0% { 
+                transform: translateY(100vh) rotate(0deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: translateY(-10vh) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+            width: 100%;
+        }
+
+        #profile-wrapper {
+            display: none;
+            margin-bottom: 20px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .profile-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 6px solid #1976d2;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-caption {
+            font-size: 16px;
+            color: #1565c0;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .unlock-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(21, 101, 192, 0.15);
+            text-align: center;
+            width: 320px;
+            border: 2px solid #90caf9;
+        }
+
+        input {
+            width: 85%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #90caf9;
+            border-radius: 25px;
+            text-align: center;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #1976d2;
+        }
+
+        .btn-unlock {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-unlock:hover {
+            background-color: #1565c0;
+        }
+
+        #message-container {
+            display: none;
+            width: 85%;
+            max-width: 450px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(25, 118, 210, 0.15);
+            max-height: 70vh;
+            overflow-y: auto;
+            border: 2px solid #bbdefb;
+        }
+
+        #letter-text {
+            font-size: 17px;
+            color: #0d47a1;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="heart-bg"></div>
+
+    <div class="main-wrapper">
+        <div id="profile-wrapper">
+            <div class="profile-circle">
+                <img src="matcha.jpg" alt="matcha" class="profile-pic">
+            </div>
+            <div class="photo-caption">cote</div>
+        </div>
+
+        <div class="unlock-card" id="input-section">
+            <h2 style="color: #1565c0;">🌻</h2>
+            <p style="font-size: 14px; color: #555;">(matcha)</p>
+            <p style="font-size: 30px; margin: 10px 0;">✨</p>
+            <input type="text" id="nameInput" placeholder="Write here...">
+            <br>
+            <button class="btn-unlock" onclick="startReveal()">unlock</button>
+        </div>
+
+        <div id="message-container">
+            <div id="letter-text"></div>
+        </div>
+    </div>
+
+    <script>
+        const secretMessage = "Umm hey, ik na bago pa lang tayo nagkakilala, but I really like you talaga kasi 'yung humor mo at kacute. Sa'yo lang talaga ako ganito, like fr. Alam ko naman na ilang araw pa lang tayo nagkakilala, but be, I'm in love with you at totoo 'yan. I love you, at gusto ko na makilala ka pa ng buo. Hindi kita iiwan.\n\nSana hindi ka maweirdan sa'kin kasi ganito ako, but seryoso, wala ako attachment issues, iba ka lang talaga. Super unique mo po. Hindi kita prinipressure po, ah. Ang akin lang ay gusto ko alam mo 'yun. Mahal na mahal kita, hindi kita iiwan, at mamahalin kita forever.";
+
+        function startReveal() {
+            const val = document.getElementById('nameInput').value.trim().toLowerCase();
+            if (val === "matcha") {
+                document.getElementById('input-section').style.display = "none";
+                document.getElementById('message-container').style.display = "block";
+                typeWriter();
+            }
+        }
+
+        let i = 0;
+        function typeWriter() {
+            if (i < secretMessage.length) {
+                const char = secretMessage.charAt(i);
+                document.getElementById("letter-text").innerHTML += char;
+                i++;
+
+                let speed = Math.floor(Math.random() * 30) + 20; 
+                setTimeout(typeWriter, speed);
+            } else {
+                // When typing finishes completely, show profile picture
+                showProfileCircle();
+            }
+        }
+
+        function showProfileCircle() {
+            const wrapper = document.getElementById('profile-wrapper');
+            wrapper.style.display = "block";
+        }
+
+        function createSunflower() {
+            const sunflower = document.createElement('div');
+            sunflower.classList.add('sunflower');
+            sunflower.innerHTML = '🌻';
+            sunflower.style.left = Math.random() * 95 + 'vw';
+            
+            const duration = Math.random() * 2 + 3;
+            sunflower.style.animationDuration = duration + 's';
+            
+            document.getElementById('heart-bg').appendChild(sunflower);
+            
+            setTimeout(() => { 
+                sunflower.remove(); 
+            }, duration * 1000);
+        }
+        
+        setInterval(createSunflower, 300);
+    </script>
+</body>
+</html>
